@@ -24,7 +24,7 @@
                 <div class="social d-flex bd-highlight p-3">
                     <a id="url" href="https://twitter.com/share?ref_src=twsrc%5Etfw"
                     class="twitter-share-button"
-                    data-text="asd"
+                    data-text="click on get quote to get quote than click tweet:)"
                     data-hashtags="QuotesApi"
                     data-url=a;
                     data-show-count="false"></a>
@@ -40,7 +40,7 @@
             document.getElementById('getPosts').addEventListener('click', getPosts);
             function getPosts() {
 
-                fetch('https://crossorigin.me/http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
+                fetch('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
                     .then((res) => res.json())
                     .then((data) => {
                         let outputTitle = '';
@@ -57,8 +57,10 @@
             }
             var updatedUrl = document.getElementById('url');
             updatedUrl.addEventListener('click', function(){
-                updatedUrl.dataset.text=6;
+                updatedUrl.setAttribute('data-text', 6);
             });
+
+
         </script>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </body>
