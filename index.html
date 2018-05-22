@@ -1,68 +1,72 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        <link rel="stylesheet" type="text/css" href="main.css">
-        <link rel="stylesheet" type="text/css" href="normalize.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-        <title>Motivate Yourself</title>
-    </head>
-    <body>
-        <div class="container-fluid d-flex align-items-center justify-content-center flex-column">
-            <div class="container">
-                <div class="socialAndQuoteButton">
-                    <div class="card ">
-                        <blockquote id="quoteContainer" class="blockquote mb-0 card-body">
-                            <p id="quote"></p>
-                            <footer id="quoteFooter" class="blockquote-footer display-none">
-                                <small id="author" class="text-muted"></small>
-                            </footer>
-                        </blockquote>
-                    </div>
-                </div>
-                <div class="social d-flex bd-highlight p-3">
-                    <a id="url" href="https://twitter.com/share?ref_src=twsrc%5Etfw"
-                    class="twitter-share-button"
-                    data-text="sdf"
-                    data-hashtags="QuotesApi"
-                    data-url=a;
-                    data-show-count="false"></a>
-                    <button id="getPosts" class="btn btn-primary ml-auto p-2 bd-highlight" type="button">Get quote</button>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <title>Motivate Yourself</title>
+</head>
+
+<body>
+    <div class="container-fluid d-flex align-items-center justify-content-center flex-column">
+        <div class="container">
+            <div class="socialAndQuoteButton">
+                <div class="card ">
+                    <blockquote id="quoteContainer" class="blockquote mb-0 card-body">
+                        <p id="quote"></p>
+                        <footer id="quoteFooter" class="blockquote-footer display-none">
+                            <small id="author" class="text-muted"></small>
+                        </footer>
+                    </blockquote>
                 </div>
             </div>
-            <div class="credentials">
-                <p><small>by ST</small></p>
+            <div class="social d-flex bd-highlight p-3">
+                <a id="url" href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="sdf" data-hashtags="QuotesApi" data-url=a; data-show-count="false"></a>
+                <button id="getPosts" class="btn btn-primary ml-auto p-2 bd-highlight" type="button">Get quote</button>
             </div>
         </div>
-        <script>
-
-            document.getElementById('getPosts').addEventListener('click', getPosts);
-            function getPosts() {
-
-                fetch('https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
-                    .then((res) => res.json())
-                    .then((data) => {
-                        let outputTitle = '';
-                        let outputAuthor = '';
-                        data.forEach(function(quote) {
-                            outputTitle += `${quote.content}`
-                            outputAuthor += `${quote.title}`;
-                        });
-                        var element = document.getElementById("quoteFooter");
-                        element.classList.remove("display-none");
-                        document.getElementById('quote').innerHTML = outputTitle;
-                        document.getElementById('author').innerHTML = outputAuthor;
-                    })
-            }
-            var updatedUrl = document.getElementById('url');
-            updatedUrl.addEventListener('click', function(){
-                updatedUrl.setAttribute('data-text', 6);
+        <div class="credentials">
+            <p><small>by ST</small></p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                cache: false
             });
+        });
+        $('#getPosts').on('click', function() {
+            const $btn = $(this);
 
+            //wyłączamy loading
+            //i wyłączamy przycisk by użytkownik nie był nadgorliwy
+            $btn.addClass('loading');
+            $btn.prop('disabled', 1);
 
-        </script>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    </body>
+            $.ajax({
+                    url: 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
+                    dataType: 'json',
+                    type: 'get'
+                })
+                .done(function(res) {
+                    res.forEach(function(el) {
+                        document.getElementById('quote').innerHTML = el.content;
+                        document.getElementById('author').innerHTML = el.title;
+                    })
+                })
+                .always(function() {
+                    //po zakończeniu wczytywania wyłączamy loading
+                    //i włączamy przycisk
+                    $btn.removeClass('loading');
+                    $btn.prop('disabled', 0);
+                })
+        })
+    </script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</body>
+
 </html>
