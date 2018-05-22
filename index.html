@@ -32,34 +32,37 @@
             <p><small>by ST</small></p>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-                    $.ajaxSetup({
-                        cache: false
-                    });
-                    document.getElementById('getPosts').addEventListener('click', getPosts);
-
-                    function getPosts() {
-                        fetch('https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
-                            .then((res) => res.json())
-                            .then((data) => {
-                                let outputTitle = '';
-                                let outputAuthor = '';
-                                data.forEach(function(quote) {
-                                    outputTitle += `${quote.content}`
-                                    outputAuthor += `${quote.title}`;
-                                });
-                                var element = document.getElementById("quoteFooter");
-                                element.classList.remove("display-none");
-                                document.getElementById('quote').innerHTML = outputTitle;
-                                document.getElementById('author').innerHTML = outputAuthor;
-                            })
-                    }
-                    var updatedUrl = document.getElementById('url');
-                    updatedUrl.addEventListener('click', function() {
-                        updatedUrl.setAttribute('data-text', 6);
-                    });
-                }
+        $(document).ready(function() {
+            $.ajaxSetup({
+                cache: false
+            });
+        });
+        $('#getPosts').on('click', function() {
+            const $btn = $(this);
+            //wyłączamy loading
+            //i wyłączamy przycisk by użytkownik nie był nadgorliwy
+            $btn.addClass('loading');
+            $btn.prop('disabled', 1);
+            $.ajax({
+                    url: 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
+                    dataType: 'json',
+                    type: 'get'
+                })
+                .done(function(res) {
+                    res.forEach(function(el) {
+                        document.getElementById('quote').innerHTML = el.content;
+                        document.getElementById('author').innerHTML = el.title;
+                    })
+                })
+                .always(function() {
+                    //po zakończeniu wczytywania wyłączamy loading
+                    //i włączamy przycisk
+                    $btn.removeClass('loading');
+                    $btn.prop('disabled', 0);
+                })
+        })
     </script>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
