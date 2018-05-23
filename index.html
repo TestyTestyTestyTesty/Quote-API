@@ -51,7 +51,7 @@
                     dataType: 'json',
                     type: 'get'
                 })
-                // podlaczenie wartosci z api pod pola
+                // co sie ma wykonac po prawidlowym podlaczeniu do api
                 .done(function(res) {
                     res.forEach(function(el) {
                         tweetMessage = el.content;
@@ -60,24 +60,23 @@
                         document.getElementById('quote').innerHTML = el.content;
                         document.getElementById('author').innerHTML = el.title;
                     })
+                    console.log(tweetMessage)
+                    counter++;
+                    // tworzenie linku
+                    var link = document.createElement("a");
+                    link.id = "someID";
+                    link.classList.add("twitter-share-button");
+                    link.setAttribute("href", tweetLink);
 
+                    //tworzenie ikonki
+                    var icon = document.createElement("i");
+                    icon.classList.add("fab", "fa-twitter");
+
+                    //dodanie ikonki do a, dopiecie a do diva
+                    link.appendChild(icon);
+                    var parent = document.getElementById("social");
+                    parent.insertBefore(link, parent.childNodes[0])
                 })
-            console.log(tweetLink)
-            counter++;
-            // tworzenie linku
-            var link = document.createElement("a");
-            link.id = "someID";
-            link.classList.add("twitter-share-button");
-            link.setAttribute("href", tweetLink);
-
-            //tworzenie ikonki
-            var icon = document.createElement("i");
-            icon.classList.add("fab", "fa-twitter");
-
-            //dodanie ikonki do a, dopiecie a do diva
-            link.appendChild(icon);
-            var parent = document.getElementById("social");
-            parent.insertBefore(link, parent.childNodes[0])
         });
     </script>
 
