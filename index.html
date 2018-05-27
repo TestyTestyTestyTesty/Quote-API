@@ -24,6 +24,7 @@
                 </div>
             </div>
             <div id="social" class="social d-flex bd-highlight p-3">
+                <a id="tweetButton" class="twitter-dhare-button"><i class="fab fa-twitter"></i></a>
                 <button id="getPosts" class="btn btn-primary ml-auto p-2 bd-highlight" type="button">Get quote</button>
             </div>
         </div>
@@ -55,27 +56,12 @@
                 .done(function(res) {
                     res.forEach(function(el) {
                         tweetMessage = el.content;
-                        tweetMessageUp = tweetMessage.substring(3, tweetMessage.length - 7);
-                        tweetLink += tweetMessageUp;
+                        tweetMessageUp = tweetMessage.substring(3, tweetMessage.length - 6);
                         document.getElementById('quote').innerHTML = el.content;
                         document.getElementById('author').innerHTML = el.title;
+                        var something = document.getElementById("tweetButton");
+                        something.setAttribute("href", tweetLink + encodeURIComponent(tweetMessageUp));
                     })
-                    console.log(tweetMessage)
-                    counter++;
-                    // tworzenie linku
-                    var link = document.createElement("a");
-                    link.id = "someID";
-                    link.classList.add("twitter-share-button");
-                    link.setAttribute("href", tweetLink);
-
-                    //tworzenie ikonki
-                    var icon = document.createElement("i");
-                    icon.classList.add("fab", "fa-twitter");
-
-                    //dodanie ikonki do a, dopiecie a do diva
-                    link.appendChild(icon);
-                    var parent = document.getElementById("social");
-                    parent.insertBefore(link, parent.childNodes[0])
                 })
         });
     </script>
