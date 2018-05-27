@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div id="social" class="social d-flex bd-highlight p-3">
-                <a id="tweetButton" class="twitter-dhare-button"><i class="fab fa-twitter"></i></a>
+                <a id="tweetButton"><i class="fab fa-twitter"></i></a>
                 <button id="getPosts" class="btn btn-primary ml-auto p-2 bd-highlight" type="button">Get quote</button>
             </div>
         </div>
@@ -43,7 +43,7 @@
         });
         var counter = 0;
         var tweetMessage = '';
-        var tweetLink = 'https://twitter.com/intent/tweet?text='
+        var tweetLink = 'https://twitter.com/intent/tweet?hashtags=MotivatiedAF&via=QuoteAPI&text='
         $('#getPosts').on('click', function() {
             const $btn = $(this);
             //polaczenie z api
@@ -59,8 +59,9 @@
                         tweetMessageUp = tweetMessage.substring(3, tweetMessage.length - 6);
                         document.getElementById('quote').innerHTML = el.content;
                         document.getElementById('author').innerHTML = el.title;
-                        var something = document.getElementById("tweetButton");
-                        something.setAttribute("href", tweetLink + encodeURIComponent(tweetMessageUp));
+                        var tweetButton = document.getElementById("tweetButton");
+                        tweetButton.style.display = "block";
+                        tweetButton.setAttribute("href", tweetLink + encodeURIComponent(tweetMessageUp));
                     })
                 })
         });
